@@ -19,8 +19,8 @@ import java.util.Map;
  * @Author GGstudy
  */
 @SpringBootTest
-public class AskLeaveTest {
- private Logger logger = LoggerFactory.getLogger(AskLeaveTest.class);
+public class AskLeaveTest_6x_full {
+ private Logger logger = LoggerFactory.getLogger(AskLeaveTest_6x_full.class);
 
     @Autowired
     TaskService taskService;
@@ -48,7 +48,7 @@ public class AskLeaveTest {
         logger.info(processInstance + " 流程启动成功");
 
         //user1 查找任务
-        String days = "2";
+        String days = "4";
         String assignee = "user1";
         securityUtil.logInAs(assignee);
         Task task = taskService
@@ -75,7 +75,7 @@ public class AskLeaveTest {
             taskService.complete(task.getId(), variables);
             logger.info(task.getId() + " 主管审批完成");
         } else {
-            logger.info(task.getId() + " 主管无任务可审核");
+            logger.info("主管无任务可审核");
         }
 
         //总监 查找并处理任务 判断是否需要加签
@@ -91,7 +91,7 @@ public class AskLeaveTest {
             taskService.complete(task.getId(), variables);
             logger.info(task.getId() + " 总监加签完成");
         } else {
-            logger.info(task.getId() + " 总监无任务可加签");
+            logger.info( "总监无任务可加签");
         }
 
         //人事 查找并处理任务 归档
@@ -107,7 +107,7 @@ public class AskLeaveTest {
             taskService.complete(task.getId(), variables);
             logger.info(task.getId() + " 人事归档完成");
         } else {
-            logger.info(task.getId() + " 人事无任务可归档");
+            logger.info( "人事无任务可归档");
         }
 
         //查看历史记录
