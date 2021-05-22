@@ -1,6 +1,5 @@
 package com.example.m13demo;
 
-import org.activiti.api.model.shared.model.VariableInstance;
 import org.activiti.api.process.model.ProcessInstance;
 import org.activiti.api.process.model.builders.ProcessPayloadBuilder;
 import org.activiti.api.process.runtime.ProcessRuntime;
@@ -100,12 +99,16 @@ public class AskLeaveTest_7x_full {
             Map<String, Object> variables = new HashMap<String, Object>();
             variables.put("days", days);
 
+            /**
+             * bug 怀疑是 TaskRuntimeImpl.java 164行 那个 true应该是false
+             */
             taskRuntime.complete(TaskPayloadBuilder
                     .complete()
                     .withTaskId(task.getId())
-                    //.withVariable("days",days) //bug?无效？
-                    .withVariables(variables) //bug？无效？
+                    .withVariable("days", days) //bug?无效？
+                    //.withVariables(variables) //bug？无效？
                     .build());
+
         } else {
             logger.info(assignee + " 无任务可审核");
         }

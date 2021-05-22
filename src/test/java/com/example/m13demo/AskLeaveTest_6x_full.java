@@ -20,7 +20,7 @@ import java.util.Map;
  */
 @SpringBootTest
 public class AskLeaveTest_6x_full {
- private Logger logger = LoggerFactory.getLogger(AskLeaveTest_6x_full.class);
+    private Logger logger = LoggerFactory.getLogger(AskLeaveTest_6x_full.class);
 
     @Autowired
     TaskService taskService;
@@ -42,13 +42,18 @@ public class AskLeaveTest_6x_full {
         String businessKey = "ASK00001";
         //流程定义的key
         String processDefinitionKey = "askleave_0521";
+
+        String days = "4";
+        Map<String, Object> variables = new HashMap<String, Object>();
+        variables.put("days", days);
+
         //启动一个流程实例
         ProcessInstance processInstance = runtimeService
-                .startProcessInstanceByKey(processDefinitionKey, businessKey);
+                .startProcessInstanceByKey(processDefinitionKey, businessKey,variables);
         logger.info(processInstance + " 流程启动成功");
 
         //user1 查找任务
-        String days = "4";
+        days = "2";
         String assignee = "user1";
         securityUtil.logInAs(assignee);
         Task task = taskService
@@ -57,9 +62,8 @@ public class AskLeaveTest_6x_full {
                 .taskAssignee(assignee)
                 .list().get(0);
         //user1 处理任务，即填写请假单，把天数变量赋值 >3 天总监要加签
-        Map<String, Object> variables = new HashMap<String, Object>();
         variables.put("days", days);
-        taskService.complete(task.getId(), variables);
+        taskService.complete(task.getId(), variables); //set variables有效 ！！
         logger.info(task.getId() + " 请假单填写完成，请教天数：" + days);
 
         //主管 查找并处理任务
@@ -91,7 +95,7 @@ public class AskLeaveTest_6x_full {
             taskService.complete(task.getId(), variables);
             logger.info(task.getId() + " 总监加签完成");
         } else {
-            logger.info( "总监无任务可加签");
+            logger.info("总监无任务可加签");
         }
 
         //人事 查找并处理任务 归档
@@ -107,7 +111,7 @@ public class AskLeaveTest_6x_full {
             taskService.complete(task.getId(), variables);
             logger.info(task.getId() + " 人事归档完成");
         } else {
-            logger.info( "人事无任务可归档");
+            logger.info("人事无任务可归档");
         }
 
         //查看历史记录
