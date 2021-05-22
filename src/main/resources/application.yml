@@ -1,0 +1,5 @@
+spring:
+  activiti:
+    database-schema-update: true
+    history-level: full
+    db-history-used: true
